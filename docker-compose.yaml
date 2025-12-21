@@ -1,0 +1,63 @@
+services:
+  frontend:
+    build:
+      context: ./tags-system-front
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    environment:
+      - FRONTEND_PORT=${FRONTEND_PORT}
+      - VITE_API_BASE_URL=http://backend:${BACKEND_PORT}
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: always
+
+  backend:
+    build:
+      context: ./tags-system-back
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    environment:
+      - BACKEND_PORT=${BACKEND_PORT}
+      - GROQ_API_KEY=${GROQ_TOKEN}
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      db: 
+        condition: service_healthy
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:${BACKEND_PORT}/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 30s
+
+  db:
+    build:
+      context: ./tags-system-db
+      dockerfile: Dockerfile
+    container_name: postgres
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - DB_DATABASE=${DB_DATABASE}
+#      - POSTGRES_DB=${DB_DATABASE}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_DATABASE}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  postgres_data:
+
