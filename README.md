@@ -45,20 +45,24 @@ TagsSystem/
 Используйте `.env.example` как шаблон и создайте `.env` рядом с `docker-compose.yaml`:
 
 ```env
+# Groq / LLM
+GROQ_TOKEN=your_groq_token_here
+
 # Backend
 BACKEND_PORT=4000
-NODE_ENV=development
-
-# Database
-DB_HOST=tags-system-db
-DB_PORT=5432
-DB_NAME=tags_db
-DB_USER=postgres
-DB_PASSWORD=your_password_here   # задайте свой пароль
 
 # Frontend
-FRONTEND_PORT=8181
-VITE_API_URL=http://backend:4000
+FRONTEND_PORT=8080
+
+# Database
+DB_USER=postgres
+DB_PASSWORD=change_me_pls_7865
+DB_DATABASE=tag_system
+DB_HOST=postgres
+DB_PORT=5432
+
+# Prisma / ORM / подключение к БД
+DATABASE_URL="postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}"
 ```
 
 - Не коммитьте файл `.env` в репозиторий.
