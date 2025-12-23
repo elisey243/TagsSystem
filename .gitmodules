@@ -1,0 +1,6 @@
+[submodule "tags-system-back"]
+	path = tags-system-back
+	url = https://github.com/AlexanderShatalkin/tag-system-api.git
+[submodule "tags-system-front"]
+	path = tags-system-front
+	url = https://github.com/Nimlot12/tags-system-front
