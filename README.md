@@ -74,7 +74,7 @@ DATABASE_URL="postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_
 
 1. Клонировать репозиторий:
    ```bash
-   git clone https://github.com/elisey243/TagsSystem.git
+   git clone --recurse-submodules https://github.com/elisey243/TagsSystem.git
    cd TagsSystem
    ```
 
